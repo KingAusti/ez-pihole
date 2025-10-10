@@ -1,0 +1,41 @@
+# Pi-hole Docker .gitignore
+
+# Environment files (may contain sensitive data)
+.env.local
+.env.production
+
+# Pi-hole data directories
+etc-pihole/
+etc-dnsmasq.d/
+
+# Docker volumes
+volumes/
+
+# Logs
+*.log
+
+# Backup files
+*.bak
+backup-*/
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+
+# Local configuration (contains secrets)
+.env
