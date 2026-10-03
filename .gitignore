@@ -17,6 +17,7 @@ volumes/
 # Backup files
 *.bak
 backup-*/
+docker-compose.yml.backup
 
 # macOS
 .DS_Store

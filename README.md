@@ -1,333 +1,106 @@
-# Pi-hole Docker Setup for Mac mini
+# ez-pihole
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](VERSION)
-[![License](https://img.shields.io/badge/license-EUPL--1.2-green.svg)](https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12)
+[![CI](https://github.com/KingAusti/ez-pihole/actions/workflows/ci.yml/badge.svg)](https://github.com/KingAusti/ez-pihole/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-This project provides a complete, user-friendly Docker setup to run Pi-hole on your Mac mini, giving you network-wide ad blocking and DNS filtering capabilities. **Now with automatic port conflict resolution** - Pi-hole will always start, even when default ports are in use!
+Shell scripts and a Docker Compose file for running [Pi-hole](https://pi-hole.net/)
+in a container on a Mac. It is meant for a home setup where one Mac, such as a
+Mac mini, stays on and serves DNS to the rest of the network. It targets macOS
+with Docker Desktop and has not been written or tested for Linux or Windows.
 
-## 🚀 Super Easy Start (Recommended)
+## Requirements
 
-1. **Prerequisites**: Install [Docker Desktop for Mac](https://www.docker.com/products/docker-desktop/)
+- macOS with [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+  installed and running
+- A Mac with a stable LAN address (a DHCP reservation on the router works)
+- Free ports 53, 80 and 443, or willingness to let `resolve-ports.sh` pick others
 
-2. **Download this project** to your Mac mini
+## Quick start
 
-3. **Run the easy launcher**:
-   ```bash
+1. Clone the repository and enter it. All scripts expect to run from this directory.
+
+   ```sh
+   git clone https://github.com/KingAusti/ez-pihole.git
+   cd ez-pihole
+   ```
+
+2. Run the launcher.
+
+   ```sh
    ./start-pihole.sh
    ```
 
-4. **Follow the guided setup** - The script will automatically detect your settings, resolve any port conflicts, and guide you through the process!
-
-5. **Access Pi-hole**: The setup will automatically open the admin interface for you (with the correct port if needed)
-
-## 🎯 Alternative Quick Start
-
-If you prefer the traditional approach:
-
-1. **Run the first-time setup wizard**:
-   ```bash
-   ./first-time-setup.sh
-   ```
-
-2. **Or use the original setup script**:
-   ```bash
-   ./setup.sh
-   ```
-
-## 📋 What's Included
-
-### 🎯 User-Friendly Scripts
-- **`start-pihole.sh`** - Main launcher with guided setup and management
-- **`first-time-setup.sh`** - Interactive setup wizard with step-by-step guidance
-- **`pihole-manager.sh`** - Advanced management interface with menu options
-- **`network-setup.sh`** - Network configuration helper with device-specific instructions
-- **`status.sh`** - Status dashboard and monitoring tools
-- **`resolve-ports.sh`** - Automatic port conflict resolution system
-- **`version.sh`** - Version management and changelog system
-
-### ⚙️ Core Components
-- **Docker Compose configuration** optimized for Mac mini
-- **Environment file** for easy configuration
-- **Automated setup script** that detects your IP and starts the container
-- **Persistent storage** for Pi-hole configuration and logs
-- **Dark theme** enabled by default
-- **Cloudflare DNS** as upstream DNS servers
-- **Automatic port conflict resolution** - finds alternative ports when needed
-
-## ⚙️ Configuration
-
-### Environment Variables (.env file)
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `SERVER_IP` | Your Mac mini's IP address | Auto-detected |
-| `PIHOLE_PASSWORD` | Web interface password | `change-me` |
-| `TZ` | Timezone | `America/New_York` |
-| `DNS1` | Primary upstream DNS | `1.1.1.1` (Cloudflare) |
-| `DNS2` | Secondary upstream DNS | `1.0.0.1` (Cloudflare) |
-| `DNS_PORT` | DNS server port | `53` (auto-detected) |
-| `HTTP_PORT` | Web interface HTTP port | `80` (auto-detected) |
-| `HTTPS_PORT` | Web interface HTTPS port | `443` (auto-detected) |
-
-### Customizing DNS Servers
-
-You can change the upstream DNS servers by editing the `.env` file:
-
-```bash
-# Google DNS
-DNS1=8.8.8.8
-DNS2=8.8.4.4
-
-# OpenDNS
-DNS1=208.67.222.222
-DNS2=208.67.220.220
-```
-
-## 🔧 Usage
-
-### 🎯 Easy Management (Recommended)
-```bash
-# Main launcher - handles everything automatically
-./start-pihole.sh
-
-# Advanced management with menu options
-./pihole-manager.sh
-
-# Network configuration helper
-./network-setup.sh
-
-# Quick status check
-./status.sh
-
-# Resolve port conflicts automatically
-./resolve-ports.sh
-
-# Show version information
-./version.sh show
-```
-
-### 🔧 Manual Commands
-```bash
-# Starting Pi-hole
-docker-compose up -d
-# or
-docker compose up -d
-
-# Stopping Pi-hole
-docker-compose down
-# or
-docker compose down
-
-# Viewing Logs
-docker-compose logs -f pihole
-# or
-docker compose logs -f pihole
-
-# Updating Pi-hole
-docker-compose pull && docker-compose up -d
-# or
-docker compose pull && docker compose up -d
-```
-
-## 🔧 Port Conflict Resolution
-
-This project includes an **automatic port conflict resolution system** that ensures Pi-hole can always start, even when the default ports are in use.
-
-### How It Works
-- **Automatic Detection**: Checks if ports 53, 80, and 443 are available
-- **Smart Alternatives**: Finds alternative ports when conflicts exist:
-  - DNS alternatives: 5353, 8053, 9053, or any available port
-  - HTTP alternatives: 8080, 9080, 8000, 9000, or any available port
-  - HTTPS alternatives: 8443, 9443, 8001, 9001, or any available port
-- **Configuration Updates**: Automatically updates Docker Compose and environment files
-- **Clear Feedback**: Shows exactly what ports are being used
-
-### Usage
-```bash
-# Automatic resolution during setup
-./start-pihole.sh
-./first-time-setup.sh
-
-# Manual port conflict resolution
-./resolve-ports.sh
-
-# View current port configuration
-./pihole-manager.sh  # Choose option 13
-```
-
-### Example Output
-```
-🔧 Pi-hole Port Conflict Resolution
-====================================
-
-✅ Port 53 (DNS) is available
-✅ Port 80 (HTTP) is available
-⚠️  Port 443 (HTTPS) is in use by: nginx
-🔧 Finding alternative HTTPS port...
-✅ Using port 8443 for HTTPS
-
-📋 Port Configuration Summary:
-   🔍 DNS Server:     Port 53 (TCP/UDP)
-   🌐 Web Interface:  Port 80 (HTTP)
-   🔒 Secure Web:     Port 8443 (HTTPS)
-
-🌐 Admin Interface: http://192.168.1.10:80/admin
-🔒 Secure Interface: https://192.168.1.10:8443/admin
-```
-
-## 🌐 Network Configuration
-
-### Option 1: Configure Individual Devices
-Set the DNS server on each device to your Mac mini's IP address (and port if not standard).
-
-### Option 2: Configure Router (Recommended)
-Set your router's DNS server to your Mac mini's IP address (and port if not standard). This will automatically apply Pi-hole to all devices on your network.
-
-### Finding Your Mac mini's IP Address
-```bash
-ifconfig | grep "inet " | grep -v 127.0.0.1
-```
-
-### Custom Port Configuration
-If Pi-hole is using non-standard ports, you'll need to specify them when configuring DNS:
-- **Standard ports**: Use just the IP address (e.g., `192.168.1.10`)
-- **Custom ports**: Include the port (e.g., `192.168.1.10:5353`)
-
-## 🔐 Security
-
-- **Change the default password** in the `.env` file
-- **Use HTTPS** by accessing `https://YOUR_MAC_IP/admin` (if configured)
-- **Keep Pi-hole updated** regularly
-
-## 📊 Accessing Pi-hole
-
-- **Web Interface**: `http://YOUR_MAC_IP:HTTP_PORT/admin` (e.g., `http://192.168.1.10:8080/admin`)
-- **Secure Interface**: `https://YOUR_MAC_IP:HTTPS_PORT/admin` (e.g., `https://192.168.1.10:8443/admin`)
-- **Local Domain**: `http://pihole.local/admin` (add to `/etc/hosts` if desired)
-- **Default Password**: `change-me` (change this!)
-
-> **Note**: If using standard ports (80/443), you can omit the port number from the URL.
-
-## 🛠️ Troubleshooting
-
-### Container Won't Start
-1. **Use automatic port resolution** (Recommended):
-   ```bash
-   ./resolve-ports.sh
-   ```
-
-2. **Or manually check port conflicts**:
-   ```bash
-   lsof -i :53
-   lsof -i :80
-   lsof -i :443
-   ```
-
-3. **Stop conflicting services** or let the system find alternative ports automatically
-
-### DNS Not Working
-1. Verify your Mac mini's IP address in the `.env` file
-2. Check that devices are using the correct DNS server (including port if not standard)
-3. Restart the Pi-hole container:
-   ```bash
-   docker-compose restart
-   ```
-
-### Can't Access Web Interface
-1. Check if the container is running:
-   ```bash
-   docker-compose ps
-   ```
-2. Verify the IP address and port in the `.env` file
-3. Check current port configuration:
-   ```bash
-   ./pihole-manager.sh  # Choose option 13
-   ```
-4. Check firewall settings on your Mac
-
-## 📁 File Structure
-
-```
-pihole-docker/
-├── start-pihole.sh          # 🎯 Main launcher (start here!)
-├── first-time-setup.sh      # 🧙‍♂️ Interactive setup wizard
-├── pihole-manager.sh        # 🔧 Advanced management interface
-├── network-setup.sh         # 🌐 Network configuration helper
-├── status.sh               # 📊 Status dashboard
-├── resolve-ports.sh        # 🔧 Automatic port conflict resolution
-├── version.sh              # 📋 Version management and changelog
-├── version-check.sh        # 📋 Version checking utilities
-├── setup.sh                # ⚙️ Original automated setup script
-├── test.sh                 # 🧪 Test script
-├── docker-compose.yml      # Docker Compose configuration
-├── .env                    # Environment variables
-├── VERSION                 # Version file
-├── CHANGELOG.md            # Changelog and release notes
-├── .gitignore             # Git ignore file
-├── README.md              # This file
-├── etc-pihole/            # Pi-hole configuration (created automatically)
-└── etc-dnsmasq.d/         # DNS configuration (created automatically)
-```
-
-## 🔄 Backup and Restore
-
-### Backup Pi-hole Configuration
-```bash
-# Copy the configuration directories
-cp -r etc-pihole/ backup-etc-pihole/
-cp -r etc-dnsmasq.d/ backup-etc-dnsmasq.d/
-```
-
-### Restore Pi-hole Configuration
-```bash
-# Restore from backup
-cp -r backup-etc-pihole/ etc-pihole/
-cp -r backup-etc-dnsmasq.d/ etc-dnsmasq.d/
-docker-compose up -d
-```
-
-## 📈 Monitoring
-
-- **Query Log**: Available in the Pi-hole web interface
-- **Statistics**: Real-time stats in the admin panel
-- **Block Lists**: Manage and update block lists through the web interface
-
-## 📋 Version Management
-
-This project includes a comprehensive version management system to track development and releases.
-
-### Current Version
-- **Version**: 1.0.0
-- **Release Date**: 2024-12-19
-- **Features**: Initial release with port conflict resolution
-
-### Version Commands
-```bash
-# Show current version information
-./version.sh show
-
-# Show changelog and recent changes
-./version.sh changelog
-
-# Update to new version (for developers)
-./version.sh update 1.0.1
-
-# Show help
-./version.sh help
-```
-
-### Version Information in Scripts
-All scripts include version information in their headers and can be accessed through the Pi-hole Manager (Option 14).
-
-### Changelog
-See [CHANGELOG.md](CHANGELOG.md) for detailed release notes and development history.
-
-## 🆘 Support
-
-- [Pi-hole Documentation](https://docs.pi-hole.net/)
-- [Pi-hole GitHub](https://github.com/pi-hole/pi-hole)
-- [Docker Documentation](https://docs.docker.com/)
-
-## 📝 License
-
-This project is provided as-is for educational and personal use. Pi-hole itself is licensed under the EUPL-1.2.
+   If `.env` or the `etc-pihole` directory is missing, it offers to run
+   `first-time-setup.sh`. Accept.
+
+3. Answer the wizard. It checks Docker, detects the Mac's IP, resolves port
+   conflicts, asks for a web password (default `change-me`, so set your own), a
+   timezone and an upstream DNS choice, writes `.env`, creates `etc-pihole` and
+   `etc-dnsmasq.d`, and runs `docker compose up -d`.
+
+4. Open the admin page at `http://192.168.1.10/admin`, using the IP the wizard
+   detected. If a port was changed, add `:<HTTP_PORT>` after the IP.
+
+5. Point your router, or individual devices, at the Mac's IP for DNS.
+   `./network-setup.sh` prints per-device and router instructions and can test
+   resolution.
+
+On later runs, `./start-pihole.sh` shows a menu if the container is running.
+
+## Configuration
+
+`.env` is git-ignored. `first-time-setup.sh` writes it, or `setup.sh` copies
+`.env.example`. Not every key reaches the container. `docker-compose.yml` only
+substitutes two of them and hard-codes the rest.
+
+| Key | Example | Used by |
+| --- | --- | --- |
+| `SERVER_IP` | `192.168.1.10` | Compose (`ServerIP`, `FTLCONF_LOCAL_IPV4`); also read by the scripts to build URLs |
+| `PIHOLE_PASSWORD` | `change-me` | Compose, passed to the container as `WEBPASSWORD` |
+| `TZ` | `America/New_York` | Written by the wizard only. Compose hard-codes `America/New_York` |
+| `DNS1`, `DNS2` | `1.1.1.1`, `1.0.0.1` | Written by the wizard only. Compose hard-codes Cloudflare |
+| `DNS_PORT` | `53` | Scripts only (`pihole-manager.sh`, `validate-setup.sh`) |
+| `HTTP_PORT` | `80` | Scripts only (launcher, manager) to build the admin URL |
+| `HTTPS_PORT` | `443` | Scripts only (`pihole-manager.sh`) |
+
+The published ports and the timezone and upstream DNS servers are set in
+`docker-compose.yml`. To change timezone or upstream DNS, edit that file.
+`resolve-ports.sh` rewrites the `ports` section of it, and the wizard does the
+same when it finds a conflict. After editing `.env` or the compose file, apply
+the change with `docker compose up -d`.
+
+## Scripts
+
+Run everything from the repository root.
+
+| Script | Purpose |
+| --- | --- |
+| `start-pihole.sh` | Entry point. Starts the wizard on first run, otherwise a menu (admin page, status, manager, network help, stop) |
+| `first-time-setup.sh` | Setup wizard described in Quick start. Sources `resolve-ports.sh` |
+| `pihole-manager.sh` | Menu to start, stop, restart, view logs and stats, update, edit `.env`, test, and resolve ports |
+| `status.sh` | Prints container status, web and DNS checks and basic stats. `-m` or `--monitor` keeps refreshing |
+| `network-setup.sh` | Menu with router and device DNS instructions, a macOS DNS helper and connectivity tests |
+| `resolve-ports.sh` | Finds free ports when 53, 80 or 443 are taken. Rewrites `docker-compose.yml` and the port keys in `.env` |
+| `validate-setup.sh` | Static checks (`.env` keys, compose file, directories, script permissions). Does not need Docker running |
+| `test.sh` | Checks that Docker is running, runs `docker compose config`, and checks whether ports 53, 80 and 443 are free |
+| `setup.sh` | Older non-interactive path: writes the detected IP to `.env`, creates directories and starts the container. No port handling |
+| `version.sh` | Shows the version from `VERSION` and the changelog, and `update <version>` edits version strings |
+| `version-check.sh` | Helper functions for reading `VERSION`. No other script uses it |
+
+## Troubleshooting
+
+**Port 53, 80 or 443 is already in use.** Run `./resolve-ports.sh`, or option 12
+in `./pihole-manager.sh`. It picks free ports, saves the original compose file
+as `docker-compose.yml.backup`, rewrites `docker-compose.yml` and updates the
+port keys in `.env`. Restart with `docker compose up -d`.
+
+**`validate-setup.sh` reports missing ports after resolving conflicts.** It
+looks for the literal standard port mappings in `docker-compose.yml`, so it
+flags a compose file that `resolve-ports.sh` has changed.
+
+**Checking what is running.** `./status.sh` shows status, and
+`./pihole-manager.sh` has a Troubleshooting entry and a logs entry.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
