@@ -92,9 +92,7 @@ Run everything from the repository root.
 **Port 53, 80 or 443 is already in use.** Run `./resolve-ports.sh`, or option 12
 in `./pihole-manager.sh`. It picks free ports, saves the original compose file
 as `docker-compose.yml.backup`, rewrites `docker-compose.yml` and updates the
-port keys in `.env`. Restart with `docker compose up -d`. A non-standard DNS
-port does not work for ordinary clients, which expect 53, so free port 53 if you
-can.
+port keys in `.env`. Restart with `docker compose up -d`.
 
 **`validate-setup.sh` reports missing ports after resolving conflicts.** It
 looks for the literal standard port mappings in `docker-compose.yml`, so it

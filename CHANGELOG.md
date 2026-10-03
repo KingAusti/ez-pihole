@@ -10,12 +10,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - MIT LICENSE file
 - GitHub Actions workflow running shellcheck and `docker compose config`
+- `.env.example` and `.shellcheckrc`
 
 ### Changed
+- `setup.sh` creates `.env` from `.env.example` when `.env` is missing
 - README rewritten; license badge changed from EUPL-1.2 to MIT
+
+### Fixed
+- `first-time-setup.sh` no longer uses `local` outside a function, which aborted it at the port-resolution step under `set -e`
 
 ### Removed
 - GETTING-STARTED.md, which duplicated the README
+- Committed `.env` and `docker-compose.yml.backup`; `.env` is now git-ignored
 
 ## [1.0.0] - 2024-12-19
 
