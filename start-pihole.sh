@@ -97,7 +97,6 @@ main() {
     
     # Check if Pi-hole is running
     if is_pihole_running; then
-        # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
         local ip=$(get_pihole_ip)
         print_status "Pi-hole is already running!"
         echo ""
@@ -119,7 +118,6 @@ main() {
         case $choice in
             1)
                 # Get HTTP port from .env file
-                # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
                 local http_port=$(grep "HTTP_PORT=" .env 2>/dev/null | cut -d'=' -f2)
                 if [ -n "$http_port" ] && [ "$http_port" != "80" ]; then
                     open "http://$ip:$http_port/admin"
@@ -179,9 +177,7 @@ main() {
                 sleep 3
                 
                 if is_pihole_running; then
-                    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
                     local ip=$(get_pihole_ip)
-                    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
                     local http_port=$(grep "HTTP_PORT=" .env 2>/dev/null | cut -d'=' -f2)
                     print_status "Pi-hole started successfully!"
                     
@@ -220,9 +216,7 @@ main() {
                             sleep 3
                             
                             if is_pihole_running; then
-                                # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
                                 local ip=$(get_pihole_ip)
-                                # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
                                 local http_port=$(grep "HTTP_PORT=" .env 2>/dev/null | cut -d'=' -f2)
                                 print_status "Pi-hole started successfully after port resolution!"
                                 if [ -n "$http_port" ] && [ "$http_port" != "80" ]; then

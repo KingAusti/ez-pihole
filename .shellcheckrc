@@ -1,0 +1,2 @@
+# Declare-and-assign (local x=$(cmd)) is kept as-is: splitting it would change behaviour under set -e.
+disable=SC2155

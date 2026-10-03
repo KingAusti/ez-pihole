@@ -152,20 +152,16 @@ if [ -f "./resolve-ports.sh" ]; then
     source ./resolve-ports.sh
     
     # Resolve port conflicts automatically
-    # shellcheck disable=SC2155,SC2168  # declare-and-assign kept; splitting would change behaviour under set -e; pre-existing: local used outside a function; not changed here
-    local resolved_ports=$(resolve_port_conflicts)
+    resolved_ports=$(resolve_port_conflicts)
     if [ $? -ne 0 ]; then
         print_error "Failed to resolve port conflicts"
         exit 1
     fi
     
     # Parse resolved ports
-    # shellcheck disable=SC2155,SC2168  # declare-and-assign kept; splitting would change behaviour under set -e; pre-existing: local used outside a function; not changed here
-    local dns_port=$(echo "$resolved_ports" | awk '{print $1}')
-    # shellcheck disable=SC2155,SC2168  # declare-and-assign kept; splitting would change behaviour under set -e; pre-existing: local used outside a function; not changed here
-    local http_port=$(echo "$resolved_ports" | awk '{print $2}')
-    # shellcheck disable=SC2155,SC2168  # declare-and-assign kept; splitting would change behaviour under set -e; pre-existing: local used outside a function; not changed here
-    local https_port=$(echo "$resolved_ports" | awk '{print $3}')
+    dns_port=$(echo "$resolved_ports" | awk '{print $1}')
+    http_port=$(echo "$resolved_ports" | awk '{print $2}')
+    https_port=$(echo "$resolved_ports" | awk '{print $3}')
     
     # Store ports for later use
     export RESOLVED_DNS_PORT=$dns_port

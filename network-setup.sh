@@ -85,7 +85,6 @@ get_current_dns() {
 
 # Function to show network info
 show_network_info() {
-    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local pihole_ip=$(get_pihole_ip)
     
     clear
@@ -115,7 +114,6 @@ show_network_info() {
 
 # Function to configure macOS DNS
 configure_macos_dns() {
-    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local pihole_ip=$(get_pihole_ip)
     
     if [ "$pihole_ip" = "unknown" ]; then
@@ -166,7 +164,6 @@ configure_macos_dns() {
 
 # Function to test Pi-hole connectivity
 test_connectivity() {
-    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local pihole_ip=$(get_pihole_ip)
     
     if [ "$pihole_ip" = "unknown" ]; then
@@ -206,7 +203,6 @@ test_connectivity() {
 
 # Function to show router configuration help
 show_router_help() {
-    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local pihole_ip=$(get_pihole_ip)
     
     clear
@@ -249,7 +245,6 @@ show_router_help() {
 
 # Function to show device-specific instructions
 show_device_instructions() {
-    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local pihole_ip=$(get_pihole_ip)
     
     clear
@@ -295,7 +290,6 @@ show_device_instructions() {
 
 # Function to show main menu
 show_menu() {
-    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local pihole_ip=$(get_pihole_ip)
     
     clear
@@ -340,7 +334,6 @@ check_dns_settings() {
 
 # Function to generate configuration summary
 generate_summary() {
-    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local pihole_ip=$(get_pihole_ip)
     
     clear

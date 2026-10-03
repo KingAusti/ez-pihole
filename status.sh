@@ -122,7 +122,6 @@ get_basic_stats() {
     
     if is_pihole_running; then
         # Try to get stats from Pi-hole API
-        # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
         local stats=$(curl -s --max-time 5 "http://$ip/admin/api.php?summary" 2>/dev/null)
         
         if [ -n "$stats" ]; then
@@ -162,17 +161,11 @@ show_quick_actions() {
 
 # Main status display
 show_status() {
-    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local pihole_ip=$(get_pihole_ip)
-    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local container_status=$(get_container_status)
-    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local uptime=$(get_uptime)
-    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local web_status=$(test_web_interface "$pihole_ip")
-    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local dns_status=$(test_dns_resolution "$pihole_ip")
-    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local version=$(get_pihole_version)
     
     clear
@@ -222,7 +215,6 @@ show_status() {
 
 # Function to show continuous monitoring
 monitor_mode() {
-    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local pihole_ip=$(get_pihole_ip)
     
     print_info "Starting continuous monitoring (Press Ctrl+C to exit)..."
@@ -234,17 +226,13 @@ monitor_mode() {
         print_header "======================="
         echo ""
         
-        # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
         local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
         print_info "Last updated: $timestamp"
         echo ""
         
         # Show basic status
-        # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
         local container_status=$(get_container_status)
-        # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
         local web_status=$(test_web_interface "$pihole_ip")
-        # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
         local dns_status=$(test_dns_resolution "$pihole_ip")
         
         echo "Status: $container_status | Web: $web_status | DNS: $dns_status"
