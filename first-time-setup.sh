@@ -152,16 +152,16 @@ if [ -f "./resolve-ports.sh" ]; then
     source ./resolve-ports.sh
     
     # Resolve port conflicts automatically
-    local resolved_ports=$(resolve_port_conflicts)
+    resolved_ports=$(resolve_port_conflicts)
     if [ $? -ne 0 ]; then
         print_error "Failed to resolve port conflicts"
         exit 1
     fi
     
     # Parse resolved ports
-    local dns_port=$(echo "$resolved_ports" | awk '{print $1}')
-    local http_port=$(echo "$resolved_ports" | awk '{print $2}')
-    local https_port=$(echo "$resolved_ports" | awk '{print $3}')
+    dns_port=$(echo "$resolved_ports" | awk '{print $1}')
+    http_port=$(echo "$resolved_ports" | awk '{print $2}')
+    https_port=$(echo "$resolved_ports" | awk '{print $3}')
     
     # Store ports for later use
     export RESOLVED_DNS_PORT=$dns_port

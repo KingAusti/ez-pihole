@@ -68,6 +68,7 @@ if [ -f ".env" ]; then
     fi
 else
     print_error ".env file is missing"
+    print_info "Create it with: cp .env.example .env"
 fi
 
 echo ""

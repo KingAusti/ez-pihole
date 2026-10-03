@@ -38,8 +38,13 @@ echo "📍 Detected IP address: $LOCAL_IP"
 if [ -f ".env" ]; then
     sed -i.bak "s/SERVER_IP=.*/SERVER_IP=$LOCAL_IP/" .env
     echo "✅ Updated .env file with your IP address"
+elif [ -f ".env.example" ]; then
+    cp .env.example .env
+    sed -i.bak "s/SERVER_IP=.*/SERVER_IP=$LOCAL_IP/" .env
+    echo "✅ Created .env from .env.example with your IP address"
+    echo "   Edit .env to change the password (PIHOLE_PASSWORD) and other settings."
 else
-    echo "❌ .env file not found. Please ensure it exists."
+    echo "❌ .env file not found and .env.example is missing. Please ensure one exists."
     exit 1
 fi
 

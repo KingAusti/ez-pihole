@@ -12,6 +12,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 PURPLE='\033[0;35m'
+# shellcheck disable=SC2034  # colour constant kept for parity with other scripts
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
@@ -211,6 +212,7 @@ edit_config() {
         print_info "$COMPOSE_CMD up -d"
     else
         print_error "Configuration file (.env) not found"
+        print_info "Create it with: cp .env.example .env"
     fi
 }
 
