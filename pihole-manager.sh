@@ -12,6 +12,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 PURPLE='\033[0;35m'
+# shellcheck disable=SC2034  # colour constant kept for parity with other scripts
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
@@ -71,7 +72,9 @@ get_pihole_ip() {
 
 # Function to show main menu
 show_menu() {
+    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local status=$(get_pihole_status)
+    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local ip=$(get_pihole_ip)
     
     clear
@@ -109,6 +112,7 @@ start_pihole() {
     
     if $COMPOSE_CMD ps | grep -q "Up"; then
         print_status "Pi-hole started successfully!"
+        # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
         local ip=$(get_pihole_ip)
         print_info "Access at: http://$ip/admin"
     else
@@ -146,9 +150,11 @@ show_logs() {
 
 # Function to open admin interface
 open_admin() {
+    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local ip=$(get_pihole_ip)
     if [ "$ip" != "unknown" ]; then
         # Get HTTP port from .env file
+        # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
         local http_port=$(grep "HTTP_PORT=" .env 2>/dev/null | cut -d'=' -f2)
         if [ -n "$http_port" ] && [ "$http_port" != "80" ]; then
             print_info "Opening Pi-hole admin interface..."
@@ -164,6 +170,7 @@ open_admin() {
 
 # Function to show statistics
 show_stats() {
+    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local ip=$(get_pihole_ip)
     if [ "$ip" != "unknown" ]; then
         print_info "Pi-hole Statistics:"
@@ -211,11 +218,13 @@ edit_config() {
         print_info "$COMPOSE_CMD up -d"
     else
         print_error "Configuration file (.env) not found"
+        print_info "Create it with: cp .env.example .env"
     fi
 }
 
 # Function to test Pi-hole
 test_pihole() {
+    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local ip=$(get_pihole_ip)
     if [ "$ip" != "unknown" ]; then
         print_info "Testing Pi-hole..."
@@ -241,6 +250,7 @@ test_pihole() {
 
 # Function to show network configuration help
 show_network_help() {
+    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local ip=$(get_pihole_ip)
     
     clear
@@ -315,9 +325,13 @@ show_port_config() {
     echo ""
     
     if [ -f ".env" ]; then
+        # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
         local dns_port=$(grep "DNS_PORT=" .env 2>/dev/null | cut -d'=' -f2)
+        # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
         local http_port=$(grep "HTTP_PORT=" .env 2>/dev/null | cut -d'=' -f2)
+        # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
         local https_port=$(grep "HTTPS_PORT=" .env 2>/dev/null | cut -d'=' -f2)
+        # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
         local server_ip=$(grep "SERVER_IP=" .env 2>/dev/null | cut -d'=' -f2)
         
         if [ -n "$dns_port" ]; then

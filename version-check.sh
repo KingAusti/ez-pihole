@@ -14,6 +14,7 @@ get_version() {
 
 # Function to show version banner
 show_version_banner() {
+    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local version=$(get_version)
     echo "Pi-hole Docker v$version - Mac mini Setup"
 }

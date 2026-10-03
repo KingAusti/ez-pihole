@@ -49,6 +49,7 @@ get_version() {
 
 # Function to show version information
 show_version() {
+    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local version=$(get_version)
     local git_hash=""
     local git_branch=""
@@ -123,6 +124,7 @@ update_version() {
         return 1
     fi
     
+    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local current_version=$(get_version)
     
     print_step "Updating version from $current_version to $new_version"

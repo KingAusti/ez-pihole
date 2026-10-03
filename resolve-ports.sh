@@ -65,6 +65,7 @@ find_available_port() {
 # Function to check what's using a port
 get_port_usage() {
     local port=$1
+    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local usage=$(lsof -i :$port 2>/dev/null | tail -n +2 | awk '{print $1}' | sort -u | tr '\n' ', ' | sed 's/,$//')
     if [ -n "$usage" ]; then
         echo "$usage"
@@ -371,9 +372,13 @@ show_port_config() {
     echo ""
     
     if [ -f ".env" ]; then
+        # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
         local dns_port=$(grep "DNS_PORT=" .env 2>/dev/null | cut -d'=' -f2)
+        # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
         local http_port=$(grep "HTTP_PORT=" .env 2>/dev/null | cut -d'=' -f2)
+        # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
         local https_port=$(grep "HTTPS_PORT=" .env 2>/dev/null | cut -d'=' -f2)
+        # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
         local server_ip=$(grep "SERVER_IP=" .env 2>/dev/null | cut -d'=' -f2)
         
         if [ -n "$dns_port" ]; then
@@ -420,6 +425,7 @@ main() {
     fi
     
     # Resolve port conflicts
+    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local resolved_ports=$(resolve_port_conflicts_with_feedback)
     if [ $? -ne 0 ]; then
         print_error "Failed to resolve port conflicts"
@@ -427,8 +433,11 @@ main() {
     fi
     
     # Parse resolved ports
+    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local dns_port=$(echo "$resolved_ports" | awk '{print $1}')
+    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local http_port=$(echo "$resolved_ports" | awk '{print $2}')
+    # shellcheck disable=SC2155  # declare-and-assign kept; splitting would change behaviour under set -e
     local https_port=$(echo "$resolved_ports" | awk '{print $3}')
     
     echo ""
